@@ -20,6 +20,12 @@ import requests
 
 DEFAULT_SCRIPT = Path(r"C:\Users\30855\Desktop\frozen_hl378_mw2e4_T40_D2_20260528(2)\code\formal\formal_full_hl378_mw2e4_relay_pcf_risk_qlib_backtest.py")
 KEY = ["instrument", "datetime"]
+CODE_CHANGES = {
+    "SZ300114": {
+        "source_instrument": "SZ302132", "effective_date": "2025-02-17",
+        "evidence": "https://disc.static.szse.cn/download/disc/disk03/finalpage/2025-02-15/cedb693a-f5ee-4463-9682-ea33d406b569.PDF",
+    },
+}
 
 
 def digest(path: Path) -> str | None:
@@ -90,7 +96,7 @@ def merge_panel(old: pd.DataFrame, fetched: pd.DataFrame) -> pd.DataFrame:
     return clean(merged.reset_index())
 
 
-def fetch_one(inst: str, *, retry: int, timeout: float, period: str) -> tuple[pd.DataFrame, dict]:
+def fetch_direct(inst: str, *, retry: int, timeout: float, period: str) -> tuple[pd.DataFrame, dict]:
     params = {"openapi": "1", "dspName": "iphone", "tn": "tangram", "client": "app",
               "query": "市现率", "code": inst[-6:], "word": "", "resource_id": "51171",
               "market": "ab", "tag": "市现率", "chart_select": period,
@@ -118,6 +124,61 @@ def fetch_one(inst: str, *, retry: int, timeout: float, period: str) -> tuple[pd
             if attempt < retry:
                 time.sleep(min(attempt * 1.0, 5))
     return pd.DataFrame(columns=KEY + ["pcf"]), {"instrument": inst, "status": "failed", "attempts": retry, "rows": 0, "error": error}
+
+
+def fetch_one(inst: str, *, retry: int, timeout: float, period: str) -> tuple[pd.DataFrame, dict]:
+    frame, log = fetch_direct(inst, retry=retry, timeout=timeout, period=period)
+    change = CODE_CHANGES.get(inst)
+    if log["status"] == "ok" or not change:
+        return frame, log
+    source, source_log = fetch_direct(change["source_instrument"], retry=retry, timeout=timeout, period=period)
+    if source_log["status"] != "ok":
+        log["error"] += f"; alias {change['source_instrument']}: {source_log['error']}"
+        return frame, log
+    # Only historical observations from BEFORE the legal code change belong to
+    # the old symbol. Never label post-change values as the old security code.
+    source = source.loc[source.datetime.lt(pd.Timestamp(change["effective_date"]))].copy()
+    source["instrument"] = inst
+    source = clean(source, allow_empty=True)
+    if source.empty or not source.pcf.notna().any():
+        log["error"] += "; alias returned no valid pre-change history"
+        return frame, log
+    valid_dates = source.loc[source.pcf.notna(), "datetime"]
+    return source, {"instrument": inst, "status": "ok", "attempts": log["attempts"] + source_log["attempts"],
+                    "rows": len(source), "latest_valid_date": str(valid_dates.max().date()),
+                    "earliest_valid_date": str(valid_dates.min().date()), "error": "",
+                    "source_instrument": change["source_instrument"], "alias_valid_before": change["effective_date"],
+                    "alias_evidence": change["evidence"], "original_error": log["error"]}
+
+
+def load_resume(folder: Path, old: pd.DataFrame, original_hash: str | None, backtest: Path):
+    report = json.loads((folder / "report.json").read_text(encoding="utf-8"))
+    if not report["checks"]["unlimited_run"]:
+        raise ValueError("Cannot resume a limited smoke test as a full run")
+    if report["original_sha256"] != original_hash or digest(folder / "original.csv") != original_hash:
+        raise ValueError("Resume original snapshot/target mismatch; start a new download")
+    if report["backtest_sha256"] != digest(backtest):
+        raise ValueError("Backtest changed since cached run")
+    if digest(folder / "candidate.csv") != report["candidate_sha256"]:
+        raise ValueError("Cached candidate changed")
+    for name in ("downloaded", "download_log"):
+        if report.get(f"{name}_sha256") and digest(folder / f"{name}.csv") != report[f"{name}_sha256"]:
+            raise ValueError(f"Cached {name} changed")
+    cached = clean(pd.read_csv(folder / "downloaded.csv", float_precision="round_trip"), allow_empty=True)
+    candidate = clean(pd.read_csv(folder / "candidate.csv", float_precision="round_trip"))
+    # Compatibility with first-version runs without downloaded-file hashes:
+    # reconstruct the entire previously verified candidate from cached data.
+    pd.testing.assert_frame_equal(merge_panel(old, cached), candidate, check_dtype=False, check_exact=True)
+    logs = pd.read_csv(folder / "download_log.csv").fillna("")
+    if logs.instrument.duplicated().any():
+        raise ValueError("Duplicate instruments in cached download log")
+    successful = logs.loc[logs.status.eq("ok")]
+    if set(cached.instrument) != set(successful.instrument):
+        raise ValueError("Cached data/log successful instruments disagree")
+    actual_counts = cached.groupby("instrument").size()
+    if any(actual_counts[row.instrument] != int(row.rows) for row in successful.itertuples()):
+        raise ValueError("Cached download row counts disagree")
+    return cached, logs, report
 
 
 def signals(ns: dict, source: str, cases: list[str], out: Path):
@@ -225,6 +286,16 @@ def run(args) -> int:
         old = clean(pd.read_csv(out / "original.csv", float_precision="round_trip"))
     else:
         old = clean(pd.DataFrame(), allow_empty=True)
+    cached, cached_logs, previous_report = None, None, None
+    if args.resume_run:
+        if args.symbols or args.limit or args.plan:
+            raise ValueError("--resume-run cannot be combined with --symbols/--limit/--plan")
+        cached, cached_logs, previous_report = load_resume(args.resume_run, old, original_hash, args.backtest)
+        if Path(previous_report["target"]).resolve() != target.resolve():
+            raise ValueError("Resume target mismatch")
+        if args.cases and args.cases != previous_report["cases"]:
+            raise ValueError("Resume case selection must match cached run")
+        args.cases, args.pred_source = previous_report["cases"], previous_report["pred_source"]
     cases = args.cases or ns["DEFAULT_CASES"]
     # Stream cases and keep only compact coverage rows instead of all predictions.
     before_parts = []
@@ -234,6 +305,10 @@ def run(args) -> int:
     before = pd.concat(before_parts, ignore_index=True)
     before.to_csv(out / "coverage_before.csv", index=False)
     instruments = pd.read_csv(out / "instruments.csv")["instrument"].tolist()
+    if previous_report:
+        previous_sources = json.loads((args.resume_run / "prediction_sources.json").read_text(encoding="utf-8"))
+        if initial_sources != previous_sources or set(cached_logs.instrument) != set(instruments):
+            raise ValueError("Prediction sources/stock universe changed since cached run")
     if args.symbols:
         requested = {v.strip().upper() for v in args.symbols.split(",") if v.strip()}
         instruments = sorted(requested)
@@ -246,15 +321,24 @@ def run(args) -> int:
                    "limited": limited, "mode": "plan_only"})
         print(f"Plan ready: {len(instruments)} stocks; no downloads or target writes. {out}")
         return 0
-    frames, logs = [], []
+    frames, logs, pending = [], [], instruments
+    if cached is not None:
+        frames.append(cached)
+        logs.extend(cached_logs.loc[cached_logs.status.eq("ok")].to_dict("records"))
+        succeeded = set(cached_logs.loc[cached_logs.status.eq("ok"), "instrument"])
+        pending = [inst for inst in instruments if inst not in succeeded]
+        json_write(out / "resume.json", {"resumed_from": str(args.resume_run.resolve()),
+                   "reused_successful_stocks": len(succeeded), "retry_instruments": pending,
+                   "previous_failed_logs": cached_logs.loc[cached_logs.status.ne("ok")].to_dict("records")})
+        print(f"Resume: reusing {len(succeeded)} stocks; fetching only {len(pending)} failed stocks", flush=True)
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
-        futures = {pool.submit(fetch_one, inst, retry=args.retry, timeout=args.timeout, period=args.period): inst for inst in instruments}
+        futures = {pool.submit(fetch_one, inst, retry=args.retry, timeout=args.timeout, period=args.period): inst for inst in pending}
         for count, future in enumerate(as_completed(futures), 1):
             frame, log = future.result()
             logs.append(log)
             if not frame.empty:
                 frames.append(frame)
-            print(f"[{count}/{len(instruments)}] {log['instrument']} {log['status']} rows={log['rows']}", flush=True)
+            print(f"[{count}/{len(pending)}] {log['instrument']} {log['status']} rows={log['rows']}", flush=True)
     download_log = pd.DataFrame(logs)
     download_log.to_csv(out / "download_log.csv", index=False, encoding="utf-8-sig")
     fetched = pd.concat(frames, ignore_index=True) if frames else pd.DataFrame(columns=KEY + ["pcf"])
@@ -314,6 +398,8 @@ def run(args) -> int:
     report = {"accepted": all(checks.values()), "checks": checks, "target": str(target),
               "backtest": str(args.backtest), "backtest_sha256": backtest_hash, "pred_source": args.pred_source, "cases": cases,
               "original_sha256": original_hash, "candidate_sha256": digest(candidate_path),
+              "downloaded_sha256": digest(out / "downloaded.csv"), "download_log_sha256": digest(out / "download_log.csv"),
+              "resumed_from": str(args.resume_run.resolve()) if args.resume_run else None,
               "original_rows": len(old), "candidate_rows": len(candidate), "requested_stocks": len(instruments),
               "failed_downloads": failed, "coverage_before": float(detail.covered_before.mean()),
               "coverage_after": float(detail.covered_after.mean()), "missing_top100": int((~detail.covered_after).sum()),
@@ -353,7 +439,10 @@ def main() -> int:
     parser.add_argument("--limit", type=int, default=0, help="Limit download count; never publishable")
     parser.add_argument("--plan", action="store_true", help="Inspect predictions and existing coverage only")
     parser.add_argument("--publish-run", type=Path, help="Publish a previously accepted run with backup")
+    parser.add_argument("--resume-run", type=Path, help="Reuse verified downloads and retry only failed stocks from a full run")
     args = parser.parse_args()
+    if args.publish_run and args.resume_run:
+        parser.error("--publish-run and --resume-run are mutually exclusive")
     if args.workers < 1 or args.retry < 1 or args.timeout <= 0 or args.limit < 0:
         parser.error("workers/retry/timeout must be positive; limit must be >= 0")
     try:

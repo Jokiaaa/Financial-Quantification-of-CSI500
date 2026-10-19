@@ -87,6 +87,55 @@ class UpdateTests(unittest.TestCase):
         self.assertTrue(audit.covered.all())
         self.assertTrue(audit.loc[audit.instrument.eq(insts[35]), "filtered"].item())
 
+    def test_code_change_alias_only_maps_pre_change_history(self):
+        source = u.clean(self.frame([("SZ302132", "2024-01-01", -5, 1),
+                                     ("SZ302132", "2025-02-16", 8, 1),
+                                     ("SZ302132", "2025-02-17", 99, 1),
+                                     ("SZ302132", "2026-01-01", 100, 1)]))
+        failed = {"instrument": "SZ300114", "status": "failed", "attempts": 3, "rows": 0, "error": "missing chartInfo"}
+        ok = {"instrument": "SZ302132", "status": "ok", "attempts": 1, "rows": 4, "error": ""}
+        with patch.object(u, "fetch_direct", side_effect=[(pd.DataFrame(), failed), (source, ok)]) as fetch:
+            frame, log = u.fetch_one("SZ300114", retry=3, timeout=5, period="全部")
+        self.assertEqual([call.args[0] for call in fetch.call_args_list], ["SZ300114", "SZ302132"])
+        self.assertEqual(frame.pcf.tolist(), [-5, 8])
+        self.assertEqual(set(frame.instrument), {"SZ300114"})
+        self.assertTrue(frame.datetime.lt(pd.Timestamp("2025-02-17")).all())
+        self.assertEqual(log["status"], "ok")
+        self.assertEqual(log["source_instrument"], "SZ302132")
+        self.assertEqual(log["rows"], 2)
+        self.assertEqual(log["attempts"], 4)
+
+    def test_alias_without_pre_change_data_stays_failed(self):
+        source = u.clean(self.frame([("SZ302132", "2026-01-01", 100, 1)]))
+        failed = {"instrument": "SZ300114", "status": "failed", "attempts": 1, "rows": 0, "error": "missing chartInfo"}
+        with patch.object(u, "fetch_direct", side_effect=[(pd.DataFrame(), failed), (source, {"status": "ok"})]):
+            frame, log = u.fetch_one("SZ300114", retry=1, timeout=5, period="全部")
+        self.assertTrue(frame.empty)
+        self.assertEqual(log["status"], "failed")
+
+    def test_resume_reuses_verified_cache_and_rejects_tampering(self):
+        with tempfile.TemporaryDirectory(dir=Path(__file__).parent) as folder:
+            folder = Path(folder)
+            script = folder / "backtest.py"
+            script.write_text("# fixture")
+            old = u.clean(self.frame([("SH600004", "2020-01-01", 8, 1)]))
+            fetched = u.clean(self.frame([("SH600004", "2020-01-02", 9, 1)]))
+            old.to_csv(folder / "original.csv", index=False)
+            fetched.to_csv(folder / "downloaded.csv", index=False)
+            u.merge_panel(old, fetched).to_csv(folder / "candidate.csv", index=False)
+            pd.DataFrame([{"instrument": "SH600004", "status": "ok", "rows": 1},
+                          {"instrument": "SZ300114", "status": "failed", "rows": 0}]).to_csv(folder / "download_log.csv", index=False)
+            original_hash = u.digest(folder / "original.csv")
+            u.json_write(folder / "report.json", {"checks": {"unlimited_run": True}, "original_sha256": original_hash,
+                         "backtest_sha256": u.digest(script), "candidate_sha256": u.digest(folder / "candidate.csv")})
+            cache, logs, _ = u.load_resume(folder, old, original_hash, script)
+            self.assertEqual(len(cache), 1)
+            self.assertEqual(logs.loc[logs.status.eq("failed"), "instrument"].tolist(), ["SZ300114"])
+            fetched.loc[0, "pcf"] = 123
+            fetched.to_csv(folder / "downloaded.csv", index=False)
+            with self.assertRaises(AssertionError):
+                u.load_resume(folder, old, original_hash, script)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
