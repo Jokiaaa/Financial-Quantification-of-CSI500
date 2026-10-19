@@ -1,0 +1,82 @@
+{
+  "scope": "Curated research-note snapshots; not the complete experiment archive or an independent verification of their claims",
+  "sources": [
+    {
+      "id": "E01",
+      "original_relative_path": "v1/考试.txt",
+      "snapshot": "baseline_evaluation.txt",
+      "bytes": 6033,
+      "sha256": "1c6525e0b836465d8f2deac5573159d4a646b3366251e23c91f7e0ab4011216e"
+    },
+    {
+      "id": "E02",
+      "original_relative_path": "v24/v24-c半衰期比较.txt",
+      "snapshot": "recency_half_life_comparison.txt",
+      "bytes": 8258,
+      "sha256": "bafa2d926f026a5cac56bfc23beeed80d33ac1420499342dfe231ba16a9dc569"
+    },
+    {
+      "id": "E03",
+      "original_relative_path": "v25/说明.txt",
+      "snapshot": "hl378_selection.txt",
+      "bytes": 363,
+      "sha256": "5dfe3bdf09d6003f32e5f10c9ba02ab3ac6f9b489a106f2b42ad4c387e22300f"
+    },
+    {
+      "id": "E04",
+      "original_relative_path": "v31/最终模型定版说明.txt",
+      "snapshot": "rolling_model_decision.txt",
+      "bytes": 1905,
+      "sha256": "8455609f63c253e9305240027a530d17e0c36c75e3da1e2f53f9d10a77d43483"
+    },
+    {
+      "id": "E05",
+      "original_relative_path": "研究2/confirm有效成分.txt",
+      "snapshot": "feature_ablation.txt",
+      "bytes": 3575,
+      "sha256": "1f4c40b7382bf44a5928dee7561ad1f11b327ad2844018b4b4ecb3fc064f4d5f"
+    },
+    {
+      "id": "E06",
+      "original_relative_path": "研究4/防未来信息泄露.txt",
+      "snapshot": "router_information_audit.txt",
+      "bytes": 6835,
+      "sha256": "077025269f6a0290fe8c70a27d97ddaae258906841474bebb235c8c49ebd2298"
+    },
+    {
+      "id": "E07",
+      "original_relative_path": "研究5/HL378半年度接力保守版实验记录_20260505.md",
+      "snapshot": "relay_guard_experiment.md",
+      "bytes": 10245,
+      "sha256": "755f15aa1bead759e9f799d45368de1014313ebb23cb321cd59d761fb7294ba8"
+    },
+    {
+      "id": "E08",
+      "original_relative_path": "研究6/HL378_Failure_Aware_Router_v4_交接总报告_20260508.md",
+      "snapshot": "failure_router_report.md",
+      "bytes": 33794,
+      "sha256": "edcd347b61d3d85dfd99187f088b6af12f2b488bc8631d3fd2b515af92a98847"
+    },
+    {
+      "id": "E09",
+      "original_relative_path": "研究7/研究7_风险模型实验总报告.md",
+      "snapshot": "downside_risk_experiment.md",
+      "bytes": 8280,
+      "sha256": "ce7f5901c938938613d9fea73d7d8261881f8f946315c9ba4a475b5e106a7938"
+    },
+    {
+      "id": "E10",
+      "original_relative_path": "研究8/模型1接力基本盘健康度风控实验记录_20260527.md",
+      "snapshot": "portfolio_health_experiment.md",
+      "bytes": 9524,
+      "sha256": "ace7f9eac671147bea0961ea13670c28c9329969e0198394aeb9cd939b08d363"
+    },
+    {
+      "id": "E11",
+      "original_relative_path": "最终版本/frozen_hl378_mw2e4_T40_D2_20260528/README_FREEZE.txt",
+      "snapshot": "freeze_description.txt",
+      "bytes": 867,
+      "sha256": "28fe1d6c2592c3bf7478e4dd29e9692f6bf815f1b5502337ddaccc4593243c5e"
+    }
+  ]
+}

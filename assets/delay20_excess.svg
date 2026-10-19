@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 510" role="img" aria-labelledby="title description">
+<title id="title">CSI 500: excess return by delayed evaluation window</title>
+<desc id="description">Paired baseline and PCF-filtered window excess returns from report section 15. Percentage points, not annualized. Negative observations are included.</desc>
+<rect width="1120" height="510" rx="16" fill="#f6f8fc"/>
+<g font-family="Arial, sans-serif" fill="#15253d">
+<text x="40" y="40" font-size="23" font-weight="700">CSI 500 · Valuation-aware stock selection</text>
+<text x="40" y="66" font-size="13" fill="#52627a">Reported excess return per delayed window · percentage points · historical simulation</text>
+<rect x="730" y="81" width="12" height="12" fill="#94a3b8"/><text x="749" y="92" font-size="12">Relay baseline</text>
+<rect x="875" y="81" width="12" height="12" fill="#0f766e"/><text x="894" y="92" font-size="12">Relay + PCF</text>
+<line x1="72" x2="1082" y1="390.00" y2="390.00" stroke="#dde4ee"/>
+<text x="59" y="394.00" text-anchor="end" font-size="12">-10</text>
+<line x1="72" x2="1082" y1="335.77" y2="335.77" stroke="#dde4ee"/>
+<text x="59" y="339.77" text-anchor="end" font-size="12">-5</text>
+<line x1="72" x2="1082" y1="281.54" y2="281.54" stroke="#64748b"/>
+<text x="59" y="285.54" text-anchor="end" font-size="12">0</text>
+<line x1="72" x2="1082" y1="227.31" y2="227.31" stroke="#dde4ee"/>
+<text x="59" y="231.31" text-anchor="end" font-size="12">5</text>
+<line x1="72" x2="1082" y1="173.08" y2="173.08" stroke="#dde4ee"/>
+<text x="59" y="177.08" text-anchor="end" font-size="12">10</text>
+<line x1="72" x2="1082" y1="118.85" y2="118.85" stroke="#dde4ee"/>
+<text x="59" y="122.85" text-anchor="end" font-size="12">15</text>
+<rect x="79.96" y="201.60" width="12" height="79.94" fill="#94a3b8"><title>2015H1 relay_tie: 7.37 pp</title></rect>
+<rect x="93.96" y="201.60" width="12" height="79.94" fill="#0f766e"><title>2015H1 relay_tie_pcf: 7.37 pp</title></rect>
+<text transform="translate(93.96,408) rotate(55)" font-size="11">2015H1</text>
+<rect x="123.87" y="221.67" width="12" height="59.87" fill="#94a3b8"><title>2015H2 relay_tie: 5.52 pp</title></rect>
+<rect x="137.87" y="236.96" width="12" height="44.58" fill="#0f766e"><title>2015H2 relay_tie_pcf: 4.11 pp</title></rect>
+<text transform="translate(137.87,408) rotate(55)" font-size="11">2015H2</text>
+<rect x="167.78" y="201.60" width="12" height="79.94" fill="#94a3b8"><title>2016H1 relay_tie: 7.37 pp</title></rect>
+<rect x="181.78" y="201.60" width="12" height="79.94" fill="#0f766e"><title>2016H1 relay_tie_pcf: 7.37 pp</title></rect>
+<text transform="translate(181.78,408) rotate(55)" font-size="11">2016H1</text>
+<rect x="211.70" y="190.65" width="12" height="90.89" fill="#94a3b8"><title>2016H2 relay_tie: 8.38 pp</title></rect>
+<rect x="225.70" y="185.22" width="12" height="96.31" fill="#0f766e"><title>2016H2 relay_tie_pcf: 8.88 pp</title></rect>
+<text transform="translate(225.70,408) rotate(55)" font-size="11">2016H2</text>
+<rect x="255.61" y="226.01" width="12" height="55.53" fill="#94a3b8"><title>2017H1 relay_tie: 5.12 pp</title></rect>
+<rect x="269.61" y="218.41" width="12" height="63.12" fill="#0f766e"><title>2017H1 relay_tie_pcf: 5.82 pp</title></rect>
+<text transform="translate(269.61,408) rotate(55)" font-size="11">2017H1</text>
+<rect x="299.52" y="167.33" width="12" height="114.21" fill="#94a3b8"><title>2017H2 relay_tie: 10.53 pp</title></rect>
+<rect x="313.52" y="192.82" width="12" height="88.72" fill="#0f766e"><title>2017H2 relay_tie_pcf: 8.18 pp</title></rect>
+<text transform="translate(313.52,408) rotate(55)" font-size="11">2017H2</text>
+<rect x="343.43" y="205.72" width="12" height="75.81" fill="#94a3b8"><title>2018H1 relay_tie: 6.99 pp</title></rect>
+<rect x="357.43" y="201.49" width="12" height="80.04" fill="#0f766e"><title>2018H1 relay_tie_pcf: 7.38 pp</title></rect>
+<text transform="translate(357.43,408) rotate(55)" font-size="11">2018H1</text>
+<rect x="387.35" y="179.91" width="12" height="101.63" fill="#94a3b8"><title>2018H2 relay_tie: 9.37 pp</title></rect>
+<rect x="401.35" y="157.24" width="12" height="124.30" fill="#0f766e"><title>2018H2 relay_tie_pcf: 11.46 pp</title></rect>
+<text transform="translate(401.35,408) rotate(55)" font-size="11">2018H2</text>
+<rect x="431.26" y="236.53" width="12" height="45.01" fill="#94a3b8"><title>2019H1 relay_tie: 4.15 pp</title></rect>
+<rect x="445.26" y="178.28" width="12" height="103.26" fill="#0f766e"><title>2019H1 relay_tie_pcf: 9.52 pp</title></rect>
+<text transform="translate(445.26,408) rotate(55)" font-size="11">2019H1</text>
+<rect x="475.17" y="281.54" width="12" height="44.58" fill="#94a3b8"><title>2019H2 relay_tie: -4.11 pp</title></rect>
+<rect x="489.17" y="281.54" width="12" height="48.16" fill="#0f766e"><title>2019H2 relay_tie_pcf: -4.44 pp</title></rect>
+<text transform="translate(489.17,408) rotate(55)" font-size="11">2019H2</text>
+<rect x="519.09" y="203.77" width="12" height="77.77" fill="#94a3b8"><title>2020H1 relay_tie: 7.17 pp</title></rect>
+<rect x="533.09" y="179.80" width="12" height="101.74" fill="#0f766e"><title>2020H1 relay_tie_pcf: 9.38 pp</title></rect>
+<text transform="translate(533.09,408) rotate(55)" font-size="11">2020H1</text>
+<rect x="563.00" y="281.54" width="12" height="3.69" fill="#94a3b8"><title>2020H2 relay_tie: -0.34 pp</title></rect>
+<rect x="577.00" y="239.24" width="12" height="42.30" fill="#0f766e"><title>2020H2 relay_tie_pcf: 3.90 pp</title></rect>
+<text transform="translate(577.00,408) rotate(55)" font-size="11">2020H2</text>
+<rect x="606.91" y="205.94" width="12" height="75.60" fill="#94a3b8"><title>2021H1 relay_tie: 6.97 pp</title></rect>
+<rect x="620.91" y="203.12" width="12" height="78.42" fill="#0f766e"><title>2021H1 relay_tie_pcf: 7.23 pp</title></rect>
+<text transform="translate(620.91,408) rotate(55)" font-size="11">2021H1</text>
+<rect x="650.83" y="184.03" width="12" height="97.51" fill="#94a3b8"><title>2021H2 relay_tie: 8.99 pp</title></rect>
+<rect x="664.83" y="135.44" width="12" height="146.10" fill="#0f766e"><title>2021H2 relay_tie_pcf: 13.47 pp</title></rect>
+<text transform="translate(664.83,408) rotate(55)" font-size="11">2021H2</text>
+<rect x="694.74" y="206.59" width="12" height="74.95" fill="#94a3b8"><title>2022H1 relay_tie: 6.91 pp</title></rect>
+<rect x="708.74" y="197.59" width="12" height="83.95" fill="#0f766e"><title>2022H1 relay_tie_pcf: 7.74 pp</title></rect>
+<text transform="translate(708.74,408) rotate(55)" font-size="11">2022H1</text>
+<rect x="738.65" y="265.05" width="12" height="16.49" fill="#94a3b8"><title>2022H2 relay_tie: 1.52 pp</title></rect>
+<rect x="752.65" y="262.45" width="12" height="19.09" fill="#0f766e"><title>2022H2 relay_tie_pcf: 1.76 pp</title></rect>
+<text transform="translate(752.65,408) rotate(55)" font-size="11">2022H2</text>
+<rect x="782.57" y="212.77" width="12" height="68.76" fill="#94a3b8"><title>2023H1 relay_tie: 6.34 pp</title></rect>
+<rect x="796.57" y="220.26" width="12" height="61.28" fill="#0f766e"><title>2023H1 relay_tie_pcf: 5.65 pp</title></rect>
+<text transform="translate(796.57,408) rotate(55)" font-size="11">2023H1</text>
+<rect x="826.48" y="281.54" width="12" height="21.48" fill="#94a3b8"><title>2023H2 relay_tie: -1.98 pp</title></rect>
+<rect x="840.48" y="281.54" width="12" height="14.32" fill="#0f766e"><title>2023H2 relay_tie_pcf: -1.32 pp</title></rect>
+<text transform="translate(840.48,408) rotate(55)" font-size="11">2023H2</text>
+<rect x="870.39" y="219.06" width="12" height="62.47" fill="#94a3b8"><title>2024H1 relay_tie: 5.76 pp</title></rect>
+<rect x="884.39" y="199.65" width="12" height="81.89" fill="#0f766e"><title>2024H1 relay_tie_pcf: 7.55 pp</title></rect>
+<text transform="translate(884.39,408) rotate(55)" font-size="11">2024H1</text>
+<rect x="914.30" y="154.31" width="12" height="127.23" fill="#94a3b8"><title>2024H2 relay_tie: 11.73 pp</title></rect>
+<rect x="928.30" y="172.21" width="12" height="109.33" fill="#0f766e"><title>2024H2 relay_tie_pcf: 10.08 pp</title></rect>
+<text transform="translate(928.30,408) rotate(55)" font-size="11">2024H2</text>
+<rect x="958.22" y="281.54" width="12" height="3.47" fill="#94a3b8"><title>2025H1 relay_tie: -0.32 pp</title></rect>
+<rect x="972.22" y="263.75" width="12" height="17.79" fill="#0f766e"><title>2025H1 relay_tie_pcf: 1.64 pp</title></rect>
+<text transform="translate(972.22,408) rotate(55)" font-size="11">2025H1</text>
+<rect x="1002.13" y="211.47" width="12" height="70.07" fill="#94a3b8"><title>2025H2 relay_tie: 6.46 pp</title></rect>
+<rect x="1016.13" y="206.37" width="12" height="75.16" fill="#0f766e"><title>2025H2 relay_tie_pcf: 6.93 pp</title></rect>
+<text transform="translate(1016.13,408) rotate(55)" font-size="11">2025H2</text>
+<rect x="1046.04" y="281.54" width="12" height="77.77" fill="#94a3b8"><title>2026YTD relay_tie: -7.17 pp</title></rect>
+<rect x="1060.04" y="281.54" width="12" height="75.06" fill="#0f766e"><title>2026YTD relay_tie_pcf: -6.92 pp</title></rect>
+<text transform="translate(1060.04,408) rotate(55)" font-size="11">2026YTD</text>
+<text x="40" y="474" font-size="12" fill="#52627a">Source: original report, sections 15.2 and 15.4 · 23 matched windows · 2026YTD ends June 16</text>
+<text x="40" y="494" font-size="12" fill="#52627a">Rebuilt from rounded report observations; no continuous NAV or independent execution audit is implied.</text>
+</g></svg>

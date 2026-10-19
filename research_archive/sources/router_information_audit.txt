@@ -1,0 +1,144 @@
+﻿防未来信息泄露说明（针对双分支 v3 / 研究版 router）
+
+一、结论先行
+- 旧版双分支路由：确定存在未来信息泄露，问题更重。
+- dualbranch_v3：比旧版更接近研究修正版，但还不能直接判定为完全无泄露。
+- 当前最稳妥的做法：只把纯历史滚动统计、开段前可见特征作为在线输入；事后最优标签、段后 gate 统计、审计回填字段都不能进路由。
+
+二、已经确定属于未来信息泄露的字段
+1. 事后最优标签
+- best_model_by_ann_ret_6models
+- best_model_by_ir_6models
+- best_model_by_ann_ret_with_v24c
+- best_model_by_ir_with_v24c
+- best_model_corepool_with_v24c_and_announcement_strong
+
+这些字段本质上是把目标段所有候选模型的结果看完之后，再回填出“哪条最好”。它们只能用于离线分析，不能作为在线路由输入。
+
+2. 段后统计字段
+- announcement_strong_event_gated_gate_on_ratio
+- announcement_strong_event_gated_gate_on_days
+- announcement_strong_event_gated_gate_total_days
+
+这些值来自整段 summary.csv，属于事后统计，不是决策时可得特征。
+
+3. 审计回填字段
+- actual_rerank_ann / actual_rerank_ir / actual_rerank_mdd
+- actual_switch_ann / actual_switch_ir / actual_switch_mdd
+
+这些字段来自 metric audit 回写，属于明确的事后审计数据，不能参与路由。
+
+三、当前仍然高风险、但尚未找到首次生成脚本的字段
+- head_misrank_tag
+- event_effective_tag
+- market_trend_tag
+- market_breadth_tag
+- market_vol_tag
+
+目前能确认的是：
+- 它们不是当前 router 脚本现算出来的；
+- 它们是从上游 master 里被直接继承 / 拷贝过来的；
+- 我还没在当前 workspace 里找到它们的首次生成脚本，所以不能证明它们是在线可得。
+
+因此，这几项应先按“高风险外部标签”处理，不能默认作为安全输入。
+
+四、相对安全的在线输入
+- hist_rows 里的历史滚动统计
+- sample_days
+- 严格截在开段前的 event_context / market context
+- 仅依赖当前决策前已完成切片的 family score
+
+这些是目前最稳的在线口径。
+
+五、对两版路由的判断
+1. 旧版双分支路由
+- 泄露更明显。
+- 因为它直接把上述标签拿来做门控和选模。
+
+2. dualbranch_v3
+- 结构上比旧版更接近“在线可用”的研究版。
+- 但只要上游 master 仍然带着事后标签，而这些标签又参与决策，就不能直接盖章为无泄露。
+
+六、对当前工作的建议
+- 保留 dualbranch_v3 作为研究版主线。
+- 不要把带有 best_model_*、gate_on_ratio/days、actual_* 的版本当作正式在线口径。
+- head_misrank_tag / event_effective_tag / market_*_tag 在找到首次生成源之前，全部按高风险处理。
+- 后续若继续推进，应优先把这些字段的上游生成链路追到源头，再决定能不能进入正式路由。
+
+七、当前最稳妥的执行原则
+1. 只用历史信息，不用目标段答案。
+2. 只用开段前可见特征，不用开段后统计。
+3. 只用可追溯的生成链路，不用来源不明的标签。
+4. 研究版可以探索，正式版必须先完成去泄露验证。
+
+八、当前结论
+- 未来信息泄露不是只属于旧版双分支路由，也不是只属于 dualbranch_v3；它主要来自上游 master 归档链里的事后标签。
+- 目前已经证实泄露的一批字段必须移出在线路由。
+- 其余高风险字段在找到首次生成来源前，不能视为安全。
+
+## 新标签体系需要的输入
+
+如果要重做一套可给路由使用的标签，标签必须只依赖决策时点之前可见的信息，不能再用事后最优答案或段后统计。
+
+### 必须有
+- `period`
+- `start_date`
+- `end_date`
+- `sample_days`
+- 每个候选模型的历史 `ann / ir / mdd`
+- 只截到开段前的市场上下文
+- 只截到开段前的事件上下文
+- 最近 N 段的历史优势统计
+- 最近 N 段的加权均值、最近一段值、正收益次数
+
+### 可选
+- 更细的 rolling window 特征
+- 开段前的波动 / 广度 / 趋势数值 proxy
+- 冷启动标记
+- 历史样本覆盖度
+- 分支专属的稳定性分数
+
+### 绝对不能有
+- `best_model_by_ann_ret_6models`
+- `best_model_by_ir_6models`
+- `best_model_by_ann_ret_with_v24c`
+- `best_model_by_ir_with_v24c`
+- `best_model_corepool_with_v24c_and_announcement_strong`
+- `announcement_strong_event_gated_gate_on_ratio`
+- `announcement_strong_event_gated_gate_on_days`
+- `announcement_strong_event_gated_gate_total_days`
+- `actual_rerank_*`
+- `actual_switch_*`
+- `head_misrank_tag`
+- `event_effective_tag`
+- `market_trend_tag`
+- `market_breadth_tag`
+- `market_vol_tag`
+- `slice_desc`
+- `is_bad_stage`
+- `is_good_stage`
+
+## no-leak 版最终核查结论
+
+经过对路由脚本和上游数据链路的复核，当前 no-leak 版已经把主泄露点切掉：
+- 历史样本改成只保留 `end_date < current_start` 的已结束切片。
+- `sample_days` 已不再参与路由决策，改为开段前可知的 `planned_window_days`。
+- `period / start_date / end_date` 采用固定半年度窗口，并在脚本中做了硬校验，窗口不匹配会直接报错。
+
+上游数据链路方面：
+- `event_panel_parquet` 由原始公告按日期聚合，再做向前滚动的 60 日特征构建，脚本本身是按时间边界截断后再生成特征。
+- `capital_action_summary_csv` 来自各 period 的 backtest / summary 汇总，属于历史 period 的 realized 结果表，不是在线特征表。
+
+因此，当前这版路由从代码结构上看，没有看到“当前 period 直接偷看当前 / 未来收益标签”的硬泄露。
+
+保留的前提是：
+- 上游 raw 公告文件本身要保持 point-in-time 干净。
+- `capital_action_summary_csv` 和 `event_panel_parquet` 的生成过程不能再被后续人工回填未来信息。
+
+## 本次新增修正
+
+这次又进一步收紧了两处源头口径：
+
+- 公告事件特征在 [build_announcement_event_features.py](C:\Users\30855\qlib\examples\benchmarks\LightGBM\build_announcement_event_features.py) 里统一做了 `shift(1)`，即所有日频公告特征从下一交易日起生效，不再允许当天公告当天使用。
+- 自适应门控脚本 [run_adaptive_blend_baseline_announcement_backtest.py](C:\Users\30855\qlib\examples\benchmarks\LightGBM\run_adaptive_blend_baseline_announcement_backtest.py) 和 [run_adaptive_blend_baseline_attention_backtest.py](C:\Users\30855\qlib\examples\benchmarks\LightGBM\run_adaptive_blend_baseline_attention_backtest.py) 里的 IC 门控，已从未来 5 日标签改成可配置的 20 日标签口径，并且 rolling mean 按 `label_horizon` 对齐，不再只 `shift(1)`。
+- `relative_perf` 门控逻辑保持原样，因为它使用的是已经实现的历史收益，不是未来标签。

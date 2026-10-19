@@ -1,0 +1,13 @@
+当前主版本: HL378_MW2e4
+主配置文件: V24C_MAIN_HL378_MW2e4.yaml
+特征处理: alpha158_label20_plus_confirm_handler.py
+模型文件: lgb_recency_weighted_model.py
+默认 num_threads: 4
+连续验证区间: 2025-01-01 ~ 2026-03-06
+结论: HL378_MW2e4 为统一主版本，HL378_MW3e4 为防守备选
+
+Python 版本
+
+qlib 版本
+
+lightgbm 版本

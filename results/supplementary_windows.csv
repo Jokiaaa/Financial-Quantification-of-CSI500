@@ -1,0 +1,2 @@
+strategy,case,original_window,evaluation_window,trading_days,return_pct,mdd_pct,reported_excess_pp,benchmark_return_pct,source_section,source_line
+relay_tie_pcf,2026H1,2026-01-05 至 2026-06-30,2026-02-02 至 2026-06-30,96,-4.86,-13.3,-12.58,7.9,15.4,742

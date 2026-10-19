@@ -1,0 +1,14 @@
+{
+  "source": "回测结果.md",
+  "source_sha256": "4d8888b8d316a00ed07213b53d69805f8bc4d3237cf9bf81a1478f443e7669cc",
+  "sections": [
+    "15.2",
+    "15.4"
+  ],
+  "paired_windows": 23,
+  "paired_rows": 46,
+  "supplementary_rows": 1,
+  "value_origin": "rounded Markdown table observations",
+  "execution_verified": false,
+  "overlap_policy": "2026YTD is paired; overlapping PCF-only 2026H1 is supplementary"
+}

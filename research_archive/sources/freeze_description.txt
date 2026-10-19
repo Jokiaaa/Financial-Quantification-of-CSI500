@@ -1,0 +1,13 @@
+﻿HL378 MW2E4 T40 D2 frozen package
+Created: 2026-05-28 01:15:18 +08:00
+Source workspace: C:\Users\30855\qlib\examples\benchmarks\LightGBM\semiannual_rolling_yamls_for_router
+
+Included:
+- yamls/: all hl378_mw2e4_*_T40_D2.yaml files.
+- code/: run_hl378_halfyear_relay_backtest.py and local Python modules used by the YAML/task path.
+- mlruns/ and mlruns_recent_weighted_valid4_batch/: exact mw2e4 MLflow run directories referenced by run_hl378_halfyear_relay_backtest.py.
+- analysis/: selected relay/backtest outputs for audit.
+- MANIFEST.csv: SHA256 hash and size for every frozen file.
+
+Restore note:
+This preserves configs, local code, prediction artifacts, MLflow artifacts, and selected analysis outputs. A fresh OS still needs Python/conda packages and Qlib market data restored separately, especially ~/.qlib/qlib_data/cn_data, to rerun backtests or retrain.
