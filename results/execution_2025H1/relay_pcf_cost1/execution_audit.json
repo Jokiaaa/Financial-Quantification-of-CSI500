@@ -1,0 +1,11 @@
+{
+  "first_trade_date": "2025-02-07",
+  "signal_date": "2025-02-06",
+  "initial_cash": 100000000,
+  "initial_positions": [],
+  "reconstructed_target_count": 40,
+  "first_day_filled_stocks": 39,
+  "first_day_construction_cost": 92558.47454251265,
+  "pre_start_orders": 0,
+  "cost_multiple": 1.0
+}

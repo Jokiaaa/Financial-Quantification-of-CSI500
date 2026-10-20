@@ -4,6 +4,8 @@
 
 [中文介绍](docs/README.zh-CN.md) · [Research report](docs/RESEARCH_REPORT.md) · [Experiment history](docs/EXPERIMENT_HISTORY.md) · [Results](results/RESULTS.md) · [Reproduction guide](docs/REPRODUCIBILITY.md) · [Timing protocol](docs/METHODOLOGY.md)
 
+**Executed validation:** [day-21 construction, order/position exports, and fee sensitivity](results/VALIDATION.md). The portable runner starts a separate cash-funded account and records initial construction costs.
+
 **Original program archive:** [CSI 500 Quantitative Program Based on Python and Qlib](Financial-Quantification-of-CSI500-main%20%281%29.zip). The original download is preserved separately from the research presentation.
 
 ## Research question
@@ -55,7 +57,13 @@ python tools/build_showcase.py --check
 python tools/import_research_archive.py --check
 ```
 
-This rebuilds the CSV tables, chart, provenance JSON, and results summary from the committed report. It does not run Qlib or download market data. Full training and simulation additionally require external datasets, prediction artifacts, and path configuration; see the [reproduction guide](docs/REPRODUCIBILITY.md).
+This rebuilds the historical presentation. To inspect newly executed portfolio evidence without Qlib:
+
+```bash
+python tools/verify_execution_artifacts.py --run results/execution_2025H1
+```
+
+The portable `tools/research_pipeline.py` supports explicit input manifests, next-session execution, cost comparisons, and matched model training. A generated synthetic Qlib provider allows an offline demonstration without a market-data account. Real-market reruns require restored input data. See the [reproduction guide](docs/REPRODUCIBILITY.md).
 
 ## Repository map
 
@@ -77,7 +85,7 @@ Historical YAML backup files are kept under `research_archive/config_backups/`; 
 
 The paired observations support a descriptive comparison of PCF filtering within this strategy. They do not establish a causal effect, statistical significance, live profitability, or a fully untouched historical test. Continuous-account CAGR, Sharpe, and full-period maximum drawdown require daily returns and cannot be recovered from window averages.
 
-The author's day-21 construction procedure is documented in the [timing protocol](docs/METHODOLOGY.md). The historical report describes a delayed statistics window, while the available runner also contains a separate purged-prediction configuration. The exact execution trace for the stated day-21 procedure is not bundled; the presentation does not claim an execution audit.
+The [timing protocol](docs/METHODOLOGY.md) distinguishes the original delayed statistics window from the new day-21 construction replay. The latter includes daily returns, orders, fills, positions, input hashes, and construction-cost checks. It demonstrates a retrospective implementation; original historical model-training completion timestamps remain unverified.
 
 Priority extensions are a released execution manifest, matched model ablations, cost sensitivity, and a frozen prospective evaluation. See the [release standard](docs/RELEASE_STANDARD.md).
 

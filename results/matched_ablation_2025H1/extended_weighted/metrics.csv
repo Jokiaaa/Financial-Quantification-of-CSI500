@@ -1,0 +1,2 @@
+variant,cost_multiple,days,total_return,benchmark_return,compound_return_difference,daily_excess_sum,annualized_return,max_drawdown_including_initial_cash,sharpe_zero_cash_rate,information_ratio,sum_daily_cost_rate,mean_daily_turnover
+relay,1.0,97,0.10062933786559047,0.0291397430035365,0.07148959486205397,0.06414939917798726,0.2828650191059101,-0.08358190373090768,1.5331278735288734,1.7787770167249057,0.01517255349444009,0.10764834722294296

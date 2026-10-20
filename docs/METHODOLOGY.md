@@ -49,7 +49,17 @@ The YAMLs specify open-price execution. A day-21 opening order must use a target
 | Current formal runner | Loads a `valid_end_minus20td` manifest at import time and defaults to `pred_source=purged` |
 | Archived router audit | Separate investigations of information timing in exploratory routing branches |
 
-The delayed-window statistics and the current runner's purged-validation branch are distinct experimental definitions. Neither is silently substituted for the author's delayed-construction procedure. This presentation preserves the reported metrics and the stated methodology while recording that the exact supporting execution trace is not included in the repository snapshot.
+The delayed-window statistics and the historical runner's purged-validation branch are distinct experimental definitions. Neither is silently substituted for the author's delayed-construction procedure.
+
+## New executable construction replay
+
+`tools/research_pipeline.py` implements a separately identified retrospective replay. It reconstructs holdings through the waiting period's last session, transfers only that target stock list, and starts a new account containing cash and no shares on session 21. The first signal is dated session 20. Initial target purchases are made through Qlib's exchange with fees and trading constraints; later decisions return to the ordinary signal. Historical share quantities, entry prices, and prior profits are never transferred into the actual account.
+
+This precisely defines the reconstruction boundary used in the new experiment: end-of-day-20 reconstructed holdings determine the initial target. It does not use an end-of-day-21 shadow position to construct a day-21 opening order.
+
+The [executed validation](../results/VALIDATION.md) includes the order, fill, daily-return, and position exports. It exercises the specified timing and funding mechanics. The old models' historical training completion timestamps are not recovered by this rerun and are explicitly recorded as unverified.
+
+The new replay also changes opening trade eligibility: the original Qlib floating threshold tests the same day's `$change`, a closing return. The portable runner instead supplies explicit upper/lower limit expressions using `$open / Ref($close, 1)`. This avoids using the day's closing return to authorize an opening trade. It retains the configured fixed threshold, so differences between exchange boards, ST stocks, listing rules, and historical regulatory changes are not fully modeled. Qlib's other daily-data suspension and fill assumptions remain simulation assumptions, not proof of live execution feasibility.
 
 ## Execution manifest for a complete release
 

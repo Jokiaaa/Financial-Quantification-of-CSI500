@@ -1,0 +1,12 @@
+{
+  "source_name": "report_2026H1_relay_tie_pcf.csv",
+  "source_sha256": "6c61cd3a13a1806c211ee3618b9c795013dbfc04aca4318891cece11c5f3160d",
+  "days": 96,
+  "start": "2026-02-02",
+  "end": "2026-06-30",
+  "portfolio_return": -0.04864394376282688,
+  "benchmark_return": 0.07895120212966944,
+  "compound_return_difference": -0.12759514589249632,
+  "daily_excess_sum": -0.12579161135991052,
+  "conclusion": "The source table's -12.58% is rounded summed daily excess, not compound portfolio return minus benchmark. The latter rounds to -12.76 percentage points."
+}

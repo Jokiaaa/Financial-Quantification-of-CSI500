@@ -1,0 +1,24 @@
+{
+  "verified": true,
+  "kind": "synthetic_offline_demo_not_financial_evidence",
+  "variants": [
+    {
+      "variant": "relay_cost1",
+      "orders": 196,
+      "trade_records": 196,
+      "first_day_filled_stocks": 40,
+      "construction_cost": 795.7491954803467
+    },
+    {
+      "variant": "relay_pcf_cost1",
+      "orders": 224,
+      "trade_records": 224,
+      "first_day_filled_stocks": 40,
+      "construction_cost": 795.7491954803467
+    }
+  ],
+  "historical_training_timestamps_verified": false,
+  "generator_sha256": "06a4b5f21f6a9ad779f0f5b76e13c0abead0458177320af37bbe067bd2677ee4",
+  "runner_sha256": "b87970744ea6186456b999ebdbb0447dbf30364092d6c38338f8c297d19eec10",
+  "purpose": "Synthetic offline software validation; not market performance evidence"
+}

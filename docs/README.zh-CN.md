@@ -27,6 +27,8 @@
 
 ## 已有结果
 
+新增：[真实运行与交易证据](../results/VALIDATION.md)。独立入口已运行第21日现金建仓、普通/双倍成本比较，并导出订单、成交和持仓。它与下面的历史窗口统计分别展示。
+
 ![各延后窗口超额收益](../assets/delay20_excess.svg)
 
 从原始报告第15章提取的23个配对窗口中：
@@ -52,6 +54,7 @@
 ```bash
 python tools/build_showcase.py --check
 python tools/import_research_archive.py --check
+python tools/verify_execution_artifacts.py --run results/execution_2025H1
 ```
 
 原始交易代码和历史回测报告保留；新增内容负责组织、解释和展示已有成果。技术发布的验收条件见[交付标准](RELEASE_STANDARD.md)。

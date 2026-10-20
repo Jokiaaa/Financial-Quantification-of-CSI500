@@ -1,0 +1,16 @@
+{
+  "provider_uri": "../data/qlib/cn_data",
+  "previous_prediction": "../data/predictions/2024H2.pkl",
+  "current_prediction": "../data/predictions/2025H1.pkl",
+  "valuation": "../data/valuation.parquet",
+  "period_start": "2025-01-01",
+  "period_end": "2025-06-30",
+  "validation_end": "2024-12-31",
+  "wait_sessions": 20,
+  "initial_cash": 100000000,
+  "benchmark": "SH000905",
+  "strategy": {"topk": 40, "n_drop": 2, "risk_degree": 0.95},
+  "exchange": {"limit_threshold": 0.095, "deal_price": "open", "open_cost": 0.001, "close_cost": 0.002, "min_cost": 5},
+  "cost_multiples": [1.0, 2.0],
+  "allow_missing_pcf": false
+}

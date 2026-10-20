@@ -55,7 +55,11 @@ The paired mean return change is +0.87 percentage points. The latest paired 2026
 
 ![Reported window excess returns](../assets/delay20_excess.svg)
 
-The [generated results page](../results/RESULTS.md) provides every observation and the source hash. Calculations start from rounded table values, so they can differ slightly from historical summary cells calculated from unrounded data. The supplementary 2026H1 row also has a reported excess that does not reconcile with its displayed return and benchmark; that original discrepancy is documented rather than corrected by assumption.
+The [generated results page](../results/RESULTS.md) provides every observation and the source hash. Calculations start from rounded table values, so they can differ slightly from historical summary cells calculated from unrounded data. The supplementary 2026H1 mismatch is [resolved from daily records](../results/reconciliation_2026H1/RECONCILIATION.md): −12.58 is summed daily excess; the compound return difference is −12.76 percentage points. The original report is preserved.
+
+### Newly executed construction and cost experiment
+
+A separate [day-21 cash-funded replay](../results/VALIDATION.md) now exercises actual simulated construction for 2025H1 with ordinary and doubled commissions. It exports orders, fills, daily P&L, positions, and input/output hashes. The table records actual filled counts, returns, and drawdowns together. Opening price-limit checks use the current open relative to previous close, avoiding the historical floating-threshold implementation's same-day closing return in opening trade eligibility. The historical fixed 9.5% threshold remains an approximation rather than a complete board-specific rule model. These new results are not substituted into the old 23-window table.
 
 ## Discussion
 
@@ -78,7 +82,7 @@ This table identifies implemented project extensions. When describing personal a
 
 ## Scope and further validation
 
-The remaining work for a fully reproducible execution release is an explicit day-21 construction manifest linked to daily trades, positions, and cost records; portable paths; access instructions for the exact provider snapshot; and a pinned environment verified by a fresh backtest. Matched model ablations, transaction-cost sensitivity, and a frozen prospective evaluation would strengthen the empirical claim. Historical periods used repeatedly for model selection remain development evidence.
+The new portable runner, explicit input manifests, versioned environment, offline synthetic demonstration, and real-data construction replay address the implementation and execution-evidence gap. External provider data remain necessary for real-market reruns. The new comparison does not certify historical training timestamps, establish vendor point-in-time correctness, or turn previously inspected periods into untouched tests. Broader multi-period testing and a frozen prospective evaluation remain important empirical extensions.
 
 ## References and supporting material
 

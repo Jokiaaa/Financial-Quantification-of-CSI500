@@ -145,7 +145,7 @@ def results_text(rows: list[dict], supplementary: list[dict]) -> str:
         lines.append(f"- `{row['strategy']}`, {row['case']}, {row['evaluation_window']}: return {row['return_pct']:.2f}%, excess {row['reported_excess_pp']:.2f} pp, within-window MDD {row['mdd_pct']:.2f}%. Excluded from paired summary.")
         difference = row["return_pct"] - row["benchmark_return_pct"]
         if abs(difference - row["reported_excess_pp"]) > 0.021:
-            lines.append(f"- Source consistency note: displayed return minus benchmark is {difference:.2f} pp, whereas reported excess is {row['reported_excess_pp']:.2f} pp. Both original values are preserved; this discrepancy requires reconciliation with daily records.")
+            lines.append(f"- Resolved metric mismatch: displayed return minus benchmark is {difference:.2f} pp, whereas the original reported field is {row['reported_excess_pp']:.2f}. Daily records show the latter is summed daily excess, not compound return difference. See [the full-precision reconciliation](reconciliation_2026H1/RECONCILIATION.md). Original source values are preserved.")
     lines += [
         "", "## Metric and execution boundaries", "",
         "- Excess is the source's difference between compounded portfolio and benchmark returns. Small subtraction discrepancies arise from rounding.",

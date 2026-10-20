@@ -52,7 +52,7 @@ Across paired windows, PCF changes mean window return by **+0.87 pp**, with high
 ## Supplementary observation
 
 - `relay_tie_pcf`, 2026H1, 2026-02-02 至 2026-06-30: return -4.86%, excess -12.58 pp, within-window MDD -13.30%. Excluded from paired summary.
-- Source consistency note: displayed return minus benchmark is -12.76 pp, whereas reported excess is -12.58 pp. Both original values are preserved; this discrepancy requires reconciliation with daily records.
+- Resolved metric mismatch: displayed return minus benchmark is -12.76 pp, whereas the original reported field is -12.58. Daily records show the latter is summed daily excess, not compound return difference. See [the full-precision reconciliation](reconciliation_2026H1/RECONCILIATION.md). Original source values are preserved.
 
 ## Metric and execution boundaries
 

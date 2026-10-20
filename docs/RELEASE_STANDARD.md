@@ -12,9 +12,9 @@ This is a practical acceptance standard for this project, not an institution's a
 | Overlapping observations | Duplicate time coverage is not counted twice | 2026H1 PCF row separated from paired 2026YTD |
 | Presentation reproducibility | A fresh reader can regenerate committed tables and chart | Standard-library builder with check mode |
 | Timing documentation | Label maturity, reconstruction, and actual construction are distinguished | Author-stated protocol and evidence mapping |
-| Execution reproducibility | Trades match model availability, construction costs, and starting account | Requires linked daily trades / positions / execution manifest |
-| Environment portability | Paths, inputs, and compatible dependencies work in a fresh checkout | Historical dependencies documented; fresh full backtest still required |
-| Empirical robustness | Matched ablations, cost sensitivity, frozen prospective evaluation | Historical branch comparisons available; unified follow-up experiments remain |
+| Execution reproducibility | Trades match declared signal dates, construction costs, and starting account | New real-data day-21 cash-funded replay; order/fill/position/daily exports and an independent artifact verifier; original historical training timestamps remain unverified |
+| Environment portability | Explicit paths and an exercised execution environment | Portable JSON manifest runner, principal version pins, working offline synthetic provider demonstration; real data restored separately |
+| Empirical robustness | Matched ablations, cost sensitivity, frozen prospective evaluation | Three models actually trained and replayed on a common development window; ordinary/doubled-fee reference replay; broader periods and prospective evaluation remain |
 
 ## Review sequence
 

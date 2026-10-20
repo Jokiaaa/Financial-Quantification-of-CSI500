@@ -1,0 +1,150 @@
+{
+  "environment": {
+    "python": "3.12.14",
+    "platform": "Windows",
+    "packages": {
+      "pyqlib": "0.9.7",
+      "lightgbm": "4.6.0",
+      "numpy": "2.4.6",
+      "pandas": "2.3.3",
+      "PyYAML": "6.0.3",
+      "pyarrow": "24.0.0",
+      "scipy": "1.17.1",
+      "scikit-learn": "1.9.0"
+    }
+  },
+  "segments": {
+    "train": [
+      "2021-01-01",
+      "2023-12-01"
+    ],
+    "valid": [
+      "2024-01-01",
+      "2024-12-31"
+    ],
+    "test": [
+      "2025-01-01",
+      "2025-06-30"
+    ]
+  },
+  "seed": 1729,
+  "config_source": {
+    "name": "hl378_mw2e4_2025H1_T40_D2.yaml",
+    "bytes": 2647,
+    "sha256": "2e3093bdbe572b7294493f8c25c8842f9070a419d26dc41183eada29c6b6ff05"
+  },
+  "runner": {
+    "name": "research_pipeline.py",
+    "bytes": 23836,
+    "sha256": "6f7a4e40cd045c516cd1cb08226c3392150a02610d3638d9f43ea4472d2204c1"
+  },
+  "model_parameters": {
+    "loss": "mse",
+    "colsample_bytree": 0.8879,
+    "learning_rate": 0.2,
+    "subsample": 0.8789,
+    "lambda_l1": 205.6999,
+    "lambda_l2": 580.9768,
+    "max_depth": -1,
+    "num_leaves": 63,
+    "num_threads": 4,
+    "min_data_in_leaf": 100,
+    "seed": 1729,
+    "feature_fraction_seed": 1729,
+    "bagging_seed": 1729,
+    "deterministic": true,
+    "force_col_wise": true
+  },
+  "weighting_parameters": {
+    "recency_half_life_days": 378,
+    "recency_min_weight": 0.0002,
+    "recency_ref_date": "2024-12-31"
+  },
+  "dataset_configuration": {
+    "class": "DatasetH",
+    "module_path": "qlib.data.dataset",
+    "kwargs": {
+      "handler": {
+        "class": "Alpha158Label20PlusConfirm",
+        "module_path": "alpha158_label20_plus_confirm_handler",
+        "kwargs": {
+          "start_time": "2021-01-01",
+          "end_time": "2025-06-30",
+          "fit_start_time": "2008-01-01",
+          "fit_end_time": "2024-12-31",
+          "instruments": "csi500",
+          "label": [
+            "Ref($close, -20) / $close - 1"
+          ]
+        }
+      },
+      "segments": {
+        "train": [
+          "2021-01-01",
+          "2023-12-01"
+        ],
+        "valid": [
+          "2024-01-01",
+          "2024-12-31"
+        ],
+        "test": [
+          "2025-01-01",
+          "2025-06-30"
+        ]
+      }
+    }
+  },
+  "num_boost_round_cap": 300,
+  "early_stopping_rounds": 30,
+  "label_horizon_sessions": 20,
+  "training_validation_boundary_purged": true,
+  "kind": "matched_retrospective_model_ablation",
+  "fitting_engine": "The same RecencyWeightedLGBModel wrapper is used for all variants. Unweighted variants set minimum unnormalized weight to 1, producing exactly uniform training and validation weights.",
+  "predictions": {
+    "alpha158_unweighted": {
+      "prediction": {
+        "name": "pred.pkl",
+        "bytes": 721768,
+        "sha256": "c557d3d76cd1f3904e61577cba8a4987eb829e782ffaeda1804c77a203cc33b4"
+      },
+      "model": {
+        "name": "model.txt",
+        "bytes": 30825,
+        "sha256": "14cf30c72e02a589c5dea618c346880322c4d6f4202cd3a610431de969d5f24a"
+      },
+      "feature_count": 158,
+      "best_iteration": 4,
+      "training_completed_at_utc": "2026-10-19T17:11:10.195535+00:00"
+    },
+    "extended_unweighted": {
+      "prediction": {
+        "name": "pred.pkl",
+        "bytes": 721768,
+        "sha256": "c54e2a801a0ce16d25c74a60af6050468712400978011ed49000aa5ab7f596b8"
+      },
+      "model": {
+        "name": "model.txt",
+        "bytes": 31389,
+        "sha256": "c103cf7e4f6cff320e76326bf02dc62f763a69996c1cea1c9a1005fa5a3d052d"
+      },
+      "feature_count": 168,
+      "best_iteration": 4,
+      "training_completed_at_utc": "2026-10-19T17:11:15.654096+00:00"
+    },
+    "extended_weighted": {
+      "prediction": {
+        "name": "pred.pkl",
+        "bytes": 721768,
+        "sha256": "2cd2e0fc2fde02f17c05dc188e2e295498d01dc14f575699d5d904b73be1137e"
+      },
+      "model": {
+        "name": "model.txt",
+        "bytes": 29260,
+        "sha256": "5c0ddee39dcc8d3f22a7dda0e67c81e1f1bbae9bdf0b75119e520d500641d9ce"
+      },
+      "feature_count": 168,
+      "best_iteration": 3,
+      "training_completed_at_utc": "2026-10-19T17:11:20.843599+00:00"
+    }
+  }
+}

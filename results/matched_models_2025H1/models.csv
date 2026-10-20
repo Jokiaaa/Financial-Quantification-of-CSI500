@@ -1,0 +1,4 @@
+variant,feature_count,best_iteration
+alpha158_unweighted,158,4
+extended_unweighted,168,4
+extended_weighted,168,3
